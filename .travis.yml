@@ -1,0 +1,22 @@
+sudo: required
+services:
+ - docker
+   
+before_install:
+ - docker build -t dandocker1989/docker-tutorial-react -f Dockerfile.dev .
+ 
+script:
+ - docker run dandocker1989/docker-tutorial-react npm run test -- --coverage
+
+deploy: 
+ provider: elasticbeanstalk
+ region: "eu-west-1"
+ app: "docker-tutorial-react"
+ env: "DockerTutorialReact-env"
+ bucket_name: "elasticbeanstalk-eu-west-1-654526538673"
+ bucket_path: "docker-tutorial-react"
+ on: 
+  branch: master
+ access_key_id: "$AWS_ACCESS_KEY"
+ secret_access_key:
+  secure: "$AWS_SECRET_KEY"
